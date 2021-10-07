@@ -37,7 +37,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         ],
       });
       for (let t = 0; t < duration; t += step) {
-        frame.add({ time: from + t, value: Math.sin((2 * Math.PI * t) / duration) });
+        frame.add({ time: from + t, value: Math.sin((2 * Math.PI * query.frequency * t) / duration) });
       }
       return frame;
     });
