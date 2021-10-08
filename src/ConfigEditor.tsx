@@ -44,11 +44,11 @@ export class ConfigEditor extends PureComponent<Props, State> {
       },
     });
   };
-  onResolutionChange = (event: ChangeEvent<HTMLInputElement>) => {
+  onURLChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
     const jsonData = {
       ...options.jsonData,
-      resolution: parseFloat(event.target.value),
+      baseUrl: event.target.value,
     };
     onOptionsChange({ ...options, jsonData });
   };
@@ -72,10 +72,10 @@ export class ConfigEditor extends PureComponent<Props, State> {
         </div>
         <div className="gf-form">
           <FormField
-            label="Resolution"
-            onChange={this.onResolutionChange}
-            value={jsonData.resolution || ''}
-            placeholder="Enter a number"
+            label="URL"
+            onChange={this.onURLChange}
+            value={jsonData.baseUrl || ''}
+            placeholder="http://localhost:5000"
           />
         </div>
         <div className="gf-form-inline">
