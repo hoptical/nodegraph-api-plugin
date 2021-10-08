@@ -32,7 +32,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     //const step = duration / this.resolution;
     // Return a constant for each query.
     //const promises = options.targets.map(query =>
-    const promises = options.targets.map(async target => {
+    const promises = options.targets.flatMap(async target => {
       //this.doRequest(query).then(response => {
       //const data = options.targets.flatMap(target => {
       const query = defaults(target, defaultQuery);
@@ -79,13 +79,10 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       edges.forEach((edge: any) => {
         edgeFrame.add(edge);
       });
-      //return nodeFrame;
       return [nodeFrame, edgeFrame];
-      //return { data: [nodeFrame, edgeFrame] } as DataQueryResponse;
     });
 
-    return Promise.all(promises).then(data => (console.log(data), { data }));
-    //return { data };
+    return Promise.all(promises).then(data => (console.log(data), { data: data[0] }));
   }
   async doRequest(query: MyQuery) {
     const result = await getBackendSrv().datasourceRequest({
