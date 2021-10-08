@@ -1,4 +1,4 @@
-import defaults from 'lodash/defaults';
+//import defaults from 'lodash/defaults';
 
 import {
   DataQueryRequest,
@@ -10,7 +10,9 @@ import {
   FieldColorModeId,
 } from '@grafana/data';
 
-import { MyQuery, MyDataSourceOptions, defaultQuery } from './types';
+import { getBackendSrv } from '@grafana/runtime';
+
+import { MyQuery, MyDataSourceOptions } from './types';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   resolution: number;
@@ -29,55 +31,68 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     // step determines how close in time (ms) the points will be to each other.
     //const step = duration / this.resolution;
     // Return a constant for each query.
-    const data = options.targets.flatMap(target => {
-      const query = defaults(target, defaultQuery);
-      const nodeFrame = new MutableDataFrame({
-        name: 'Nodes',
-        refId: query.refId,
-        fields: [
-          //{ name: 'Time', values: [from, to], type: FieldType.time },
-          //{ name: 'Value', values: [query.constant, query.constant], type: FieldType.number },
-          { name: 'id', values: ['1', '2'], type: FieldType.string },
-          { name: 'title', values: ['Hamed', 'Mohsen'], type: FieldType.string },
-          { name: 'subTitle', values: ['Karbasi', 'Khazeni'], type: FieldType.string },
-          { name: 'detail__role', values: ['CTO', 'PO'], type: FieldType.string },
-          {
-            name: 'arc__failed',
-            values: [0.7, 0.3],
-            type: FieldType.number,
-            config: { color: { fixedColor: 'red', mode: FieldColorModeId.Fixed } },
-          },
-          {
-            name: 'arc__passed',
-            values: [0.3, 0.7],
-            type: FieldType.number,
-            config: { color: { fixedColor: 'green', mode: FieldColorModeId.Fixed } },
-          },
-          // { name: 'time', type: FieldType.time },
-          // { name: 'value', type: FieldType.number },
-        ],
-      });
+    const promises = options.targets.map(query =>
+      this.doRequest(query).then(response => {
+        //const data = options.targets.flatMap(target => {
+        //const query = defaults(target, defaultQuery);
+        const nodeFrame = new MutableDataFrame({
+          name: 'Nodes',
+          refId: query.refId,
+          fields: [
+            //{ name: 'Time', values: [from, to], type: FieldType.time },
+            //{ name: 'Value', values: [query.constant, query.constant], type: FieldType.number },
+            { name: 'id', type: FieldType.string },
+            { name: 'title', type: FieldType.string },
+            { name: 'subTitle', type: FieldType.string },
+            { name: 'detail__role', type: FieldType.string },
+            {
+              name: 'arc__failed',
+              type: FieldType.number,
+              config: { color: { fixedColor: 'red', mode: FieldColorModeId.Fixed } },
+            },
+            {
+              name: 'arc__passed',
+              type: FieldType.number,
+              config: { color: { fixedColor: 'green', mode: FieldColorModeId.Fixed } },
+            },
+          ],
+        });
 
-      const edgeFrame = new MutableDataFrame({
-        name: 'Edges',
-        refId: query.refId,
-        fields: [
-          { name: 'id', values: ['1'], type: FieldType.string },
-          { name: 'source', values: ['1'], type: FieldType.string },
-          { name: 'target', values: ['2'], type: FieldType.string },
-          { name: 'mainStat', values: ['50/s'], type: FieldType.string },
-          { name: 'secondaryStat', values: [120], type: FieldType.number },
-          { name: 'detail__type', values: ['REST'], type: FieldType.string },
-        ],
-      });
-      //edgeFrame.meta.preferredVisualisationType = 'table'
-      // for (let t = 0; t < duration; t += step) {
-      //   frame.add({ time: from + t, value: Math.sin((2 * Math.PI * query.frequency * t) / duration) });
-      // }
-      return [nodeFrame, edgeFrame];
+        const edgeFrame = new MutableDataFrame({
+          name: 'Edges',
+          refId: query.refId,
+          fields: [
+            { name: 'id', type: FieldType.string },
+            { name: 'source', type: FieldType.string },
+            { name: 'target', type: FieldType.string },
+            { name: 'mainStat', type: FieldType.string },
+            // { name: 'secondaryStat', type: FieldType.number },
+          ],
+        });
+        const nodes = response.data.nodes;
+        const edges = response.data.edges;
+        nodes.forEach((node: any) => {
+          nodeFrame.add(node);
+        });
+        edges.forEach((edge: any) => {
+          edgeFrame.add(edge);
+        });
+        return nodeFrame;
+        //return [nodeFrame, edgeFrame];
+        //return { data: [nodeFrame, edgeFrame] } as DataQueryResponse;
+      })
+    );
+    return Promise.all(promises).then(data => ({ data }));
+    //return { data };
+  }
+  async doRequest(query: MyQuery) {
+    const result = await getBackendSrv().datasourceRequest({
+      method: 'GET',
+      url: 'http://localhost:5000',
+      params: query,
     });
 
-    return { data };
+    return result;
   }
 
   async testDatasource() {
