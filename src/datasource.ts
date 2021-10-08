@@ -1,5 +1,5 @@
 import defaults from 'lodash/defaults';
-
+import _ from 'lodash';
 import {
   DataQueryRequest,
   DataQueryResponse,
@@ -25,7 +25,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     const promises = options.targets.map(async target => {
       const query = defaults(target, defaultQuery);
-      const response = await this.doRequest('/api/fetchgraph', query);
+      const response = await this.doRequest('/api/fetchgraph', `query=${query.queryText}`);
       const nodeFrame = new MutableDataFrame({
         name: 'Nodes',
         refId: query.refId,
@@ -71,21 +71,51 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     return Promise.all(promises).then(data => ({ data: data[0] }));
   }
-  async doRequest(endpoint: string, query: MyQuery) {
+  async doRequest(endpoint: string, params?: string) {
     const result = await getBackendSrv().datasourceRequest({
       method: 'GET',
-      url: `${this.baseUrl}${endpoint}`,
-      params: query,
+      url: `${this.baseUrl}${endpoint}${params?.length ? `?${params}` : ''}`,
     });
 
     return result;
   }
 
+  /**
+   * Checks whether we can connect to the API.
+   */
   async testDatasource() {
-    // Implement a health check for your data source.
-    return {
-      status: 'success',
-      message: 'Success',
-    };
+    const defaultErrorMessage = 'Cannot connect to API';
+    try {
+      const response = await this.doRequest('/health');
+      if (response.status === 200) {
+        return {
+          status: 'success',
+          message: 'Success',
+        };
+      } else {
+        return {
+          status: 'error',
+          message: response.statusText ? response.statusText : defaultErrorMessage,
+        };
+      }
+    } catch (err:any) {
+      if (_.isString(err)) {
+        return {
+          status: 'error',
+          message: err,
+        };
+      } else {
+        let message = '';
+        message += err.statusText ? err.statusText : defaultErrorMessage;
+        if (err.data && err.data.error && err.data.error.code) {
+          message += ': ' + err.data.error.code + '. ' + err.data.error.message;
+        }
+
+        return {
+          status: 'error',
+          message,
+        };
+      }
+    }
   }
 }
