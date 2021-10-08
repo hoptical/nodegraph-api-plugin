@@ -25,7 +25,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     const promises = options.targets.map(async target => {
       const query = defaults(target, defaultQuery);
-      const response = await this.doRequest(query);
+      const response = await this.doRequest('/api/fetchgraph', query);
       const nodeFrame = new MutableDataFrame({
         name: 'Nodes',
         refId: query.refId,
@@ -71,10 +71,10 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     return Promise.all(promises).then(data => ({ data: data[0] }));
   }
-  async doRequest(query: MyQuery) {
+  async doRequest(endpoint: string, query: MyQuery) {
     const result = await getBackendSrv().datasourceRequest({
       method: 'GET',
-      url: this.baseUrl,
+      url: `${this.baseUrl}${endpoint}`,
       params: query,
     });
 
