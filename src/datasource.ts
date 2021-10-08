@@ -23,26 +23,13 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   }
 
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
-    //const { range } = options;
-    //const from = range!.from.valueOf();
-    //const to = range!.to.valueOf();
-    // duration of the time range, in milliseconds.
-    //const duration = to - from;
-    // step determines how close in time (ms) the points will be to each other.
-    //const step = duration / this.resolution;
-    // Return a constant for each query.
-    //const promises = options.targets.map(query =>
-    const promises = options.targets.flatMap(async target => {
-      //this.doRequest(query).then(response => {
-      //const data = options.targets.flatMap(target => {
+    const promises = options.targets.map(async target => {
       const query = defaults(target, defaultQuery);
       const response = await this.doRequest(query);
       const nodeFrame = new MutableDataFrame({
         name: 'Nodes',
         refId: query.refId,
         fields: [
-          //{ name: 'Time', values: [from, to], type: FieldType.time },
-          //{ name: 'Value', values: [query.constant, query.constant], type: FieldType.number },
           { name: 'id', type: FieldType.string },
           { name: 'title', type: FieldType.string },
           { name: 'subTitle', type: FieldType.string },
@@ -82,7 +69,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       return [nodeFrame, edgeFrame];
     });
 
-    return Promise.all(promises).then(data => (console.log(data), { data: data[0] }));
+    return Promise.all(promises).then(data => ({ data: data[0] }));
   }
   async doRequest(query: MyQuery) {
     const result = await getBackendSrv().datasourceRequest({
