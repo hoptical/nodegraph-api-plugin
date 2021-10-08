@@ -15,11 +15,11 @@ import { getBackendSrv } from '@grafana/runtime';
 import { MyQuery, MyDataSourceOptions, defaultQuery } from './types';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
-  resolution: number;
+  baseUrl: string;
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
 
-    this.resolution = instanceSettings.jsonData.resolution || 1000.0;
+    this.baseUrl = instanceSettings.jsonData.baseUrl || '';
   }
 
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
@@ -74,7 +74,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   async doRequest(query: MyQuery) {
     const result = await getBackendSrv().datasourceRequest({
       method: 'GET',
-      url: 'http://localhost:5000',
+      url: this.baseUrl,
       params: query,
     });
 
