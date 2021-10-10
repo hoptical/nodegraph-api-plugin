@@ -98,7 +98,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           message: response.statusText ? response.statusText : defaultErrorMessage,
         };
       }
-    } catch (err:any) {
+    } catch (err) {
       if (_.isString(err)) {
         return {
           status: 'error',

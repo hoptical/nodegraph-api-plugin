@@ -2,15 +2,15 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "datasource",
   "name": "Node Graph API Plugin",
-  "id": "hamedkarbasi93-nodegraph-api-plugin",
+  "id": "hamedkarbasi93-nodegraphapi-datasource",
   "metrics": true,
   "info": {
-    "description": "",
+    "description": "A datasource that provides data for nodegraph panel via api",
     "author": {
-      "name": "karbasi",
-      "url": ""
+      "name": "Hamed Karbasi",
+      "url": "https://grafana.com/orgs/hamedkarbasi93"
     },
-    "keywords": [],
+    "keywords": ["nodegraph", "datasource", "api"],
     "logos": {
       "small": "img/logo.svg",
       "large": "img/logo.svg"
@@ -18,19 +18,19 @@
     "links": [
       {
         "name": "Website",
-        "url": "https://github.com/grafana/grafana-starter-datasource"
+        "url": "https://github.com/exaco/nodegraph-api-plugin"
       },
       {
         "name": "License",
-        "url": "https://github.com/grafana/grafana-starter-datasource/blob/master/LICENSE"
+        "url": "https://github.com/exaco/nodegraph-api-plugin/blob/master/LICENSE"
       }
     ],
     "screenshots": [],
-    "version": "%VERSION%",
+    "version": "0.1.0",
     "updated": "%TODAY%"
   },
   "dependencies": {
-    "grafanaDependency": ">=7.0.0",
+    "grafanaDependency": ">=7.5.0",
     "plugins": []
   }
 }
