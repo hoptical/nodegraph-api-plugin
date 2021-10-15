@@ -4,13 +4,11 @@
 
 This plugin provides a datasource to connect a REST API to [nodegraph](https://grafana.com/docs/grafana/latest/visualizations/node-graph/) panel of Grafana.
 
-![](src/img/graph-example.png)
+![Graph Example](src/img/graph-example.png)
 
 ## What is Grafana Data Source Plugin?
 
 Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There’s a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. Grafana Data Source Plugins enables integrating such solutions with Grafana.
-
-
 
 ## Getting started
 
@@ -26,11 +24,11 @@ for example, if you are using Grafana with containers, add:
 -e "GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=hamedkarbasi93-nodegraphapi-datasource"
 ```
 
-2. You can now add the the data source. Just enter the url of your API app and push "Save & Test". You will get an error in case of connection failure. 
+2. You can now add the the data source. Just enter the url of your API app and push "Save & Test". You will get an error in case of connection failure.
 
    > Note: The browser should have access to the application not the grafana server.
 
-![](src/img/add-datasource.png)
+![Add Datasource](src/img/add-datasource.png)
 
 3. In grafana dashboard, pick the Nodegraph panel and have the graph visualization.
 
@@ -83,8 +81,6 @@ yarn install
 - [Grafana Tutorials](https://grafana.com/tutorials/) - Grafana Tutorials are step-by-step guides that help you make the most of Grafana
 - [Grafana UI Library](https://developers.grafana.com/ui) - UI components to help you build interfaces using Grafana Design System
 
-
-
 ## Contributing
 
 Thank you for considering contributing! If you find an issue, or have a better way to do something, feel free to open an issue, or a PR.
@@ -92,4 +88,3 @@ Thank you for considering contributing! If you find an issue, or have a better w
 ## License
 
 This repository is open-sourced software licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
-
