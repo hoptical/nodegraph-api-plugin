@@ -36,7 +36,13 @@ for example, if you are using Grafana with containers, add:
 
 You REST API application should return data in the following format:
 
+### Fetch Graph
+
+This route returns the graph which is intended to visualize.
+
 endpoint: `/api/fetchgraph`
+
+method: `GET`
 
 content type: `application/json`
 
@@ -48,13 +54,24 @@ Data Format example:
 
 For more detail of the variables please visit [here](https://grafana.com/docs/grafana/latest/visualizations/node-graph/#data-api).
 
+### Health
+
+This route is for testing the health of the API which is used by the *Save & Test* action while adding the plugin.[(Part 2 of the Getting Started Section)](#getting-started).
+Currently, it only needs to return `200` status code in case of a success connection.
+
+endpoint: `/api/health`
+
+method: `GET`
+
+success status code: `200`
+
 ## Compiling the data source by yourself
 
 1. Install dependencies
 
-```bash
-yarn install
-```
+   ```bash
+   yarn install
+   ```
 
 2. Build plugin in development mode or run in watch mode
 
