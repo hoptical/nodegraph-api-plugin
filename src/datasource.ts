@@ -18,45 +18,54 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   baseUrl: string;
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
-
+  
     this.baseUrl = instanceSettings.jsonData.baseUrl || '';
   }
 
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     const promises = options.targets.map(async target => {
       const query = defaults(target, defaultQuery);
-      const response = await this.doRequest('/api/fetchgraph', `query=${query.queryText}`);
+      const responseFields = await this.doRequest('/api/graph/fields', `query=${query.queryText}`);
+      const response = await this.doRequest('/api/graph/data', `query=${query.queryText}`);
+      const nodeFieldsResponse = responseFields.data.nodes_fields;
+      const edgeFieldsResponse = responseFields.data.edges_fields;
+      interface FrameFieldType {
+        name: string;
+        type: any;
+        config?: any;
+      }
+      function fieldAssignator(FieldsResponse: any): FrameFieldType[] {
+        var outputFields: FrameFieldType[] = [];
+        FieldsResponse.forEach((field: any) => {
+          var fieldType = field['type'] === 'number' ? FieldType.number : FieldType.string;
+          var outputField: FrameFieldType = { name: field['field_name'], type: fieldType };
+          if ('color' in field) {
+            outputField.config = { color: { fixedColor: field['color'], mode: FieldColorModeId.Fixed } };
+          }
+          if ('displayName' in field) {
+            outputField.config = { displayName: field['displayName'] };
+          }
+          outputFields.push(outputField);
+        });
+        return outputFields;
+      }
+      const nodeFields: FrameFieldType[] = fieldAssignator(nodeFieldsResponse);
       const nodeFrame = new MutableDataFrame({
         name: 'Nodes',
         refId: query.refId,
-        fields: [
-          { name: 'id', type: FieldType.string },
-          { name: 'title', type: FieldType.string },
-          { name: 'subTitle', type: FieldType.string },
-          { name: 'detail__role', type: FieldType.string },
-          {
-            name: 'arc__failed',
-            type: FieldType.number,
-            config: { color: { fixedColor: 'red', mode: FieldColorModeId.Fixed } },
-          },
-          {
-            name: 'arc__passed',
-            type: FieldType.number,
-            config: { color: { fixedColor: 'green', mode: FieldColorModeId.Fixed } },
-          },
-        ],
+        fields: nodeFields,
       });
-
+      const edgeFields: FrameFieldType[] = fieldAssignator(edgeFieldsResponse);
       const edgeFrame = new MutableDataFrame({
         name: 'Edges',
         refId: query.refId,
-        fields: [
-          { name: 'id', type: FieldType.string },
-          { name: 'source', type: FieldType.string },
-          { name: 'target', type: FieldType.string },
-          { name: 'mainStat', type: FieldType.string },
-          // { name: 'secondaryStat', type: FieldType.number },
-        ],
+        fields: edgeFields,
+        //  [] { name: 'id', type: FieldType.string },
+        //   { name: 'source', type: FieldType.string },
+        //   { name: 'target', type: FieldType.string },
+        //   { name: 'mainStat', type: FieldType.string },
+        //   // { name: 'secondaryStat', type: FieldType.number },
+        // ],
       });
       const nodes = response.data.nodes;
       const edges = response.data.edges;
