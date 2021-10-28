@@ -36,11 +36,83 @@ for example, if you are using Grafana with containers, add:
 
 You REST API application should return data in the following format:
 
-### Fetch Graph
+   > Note: You API application should handle CORS policy. Otherwise you will face CORS-Policy error in Grafana.
 
-This route returns the graph which is intended to visualize.
+### Fetch Graph Fields
 
-endpoint: `/api/fetchgraph`
+This route returns the nodes and edges fields defined in the [parameter tables](https://grafana.com/docs/grafana/latest/visualizations/node-graph/#data-api).
+This would help the plugin to create desired parameters for the graph.
+For nodes, `id` and for edges, `id`, `source` and `target` fields are required and the other fields are optional.
+
+endpoint: `/api/graph/fields`
+
+method: `GET`
+
+content type: `application/json`
+
+content format example:
+
+```json
+{
+  "edges_fields": [
+    {
+      "field_name": "id",
+      "type": "string"
+    },
+    {
+      "field_name": "source",
+      "type": "string"
+    },
+    {
+      "field_name": "target",
+      "type": "string"
+    },
+    {
+      "field_name": "mainStat",
+      "type": "number"
+    }
+  ],
+  "nodes_fields": [
+    {
+      "field_name": "id",
+      "type": "string"
+    },
+    {
+      "field_name": "title",
+      "type": "string"
+    },
+    {
+      "field_name": "mainStat",
+      "type": "string"
+    },
+    {
+      "field_name": "secondaryStat",
+      "type": "number"
+    },
+    {
+      "color": "red",
+      "field_name": "arc__failed",
+      "type": "number"
+    },
+    {
+      "color": "green",
+      "field_name": "arc__passed",
+      "type": "number"
+    },
+    {
+      "displayName": "Role",
+      "field_name": "detail__role",
+      "type": "string"
+    }
+  ]
+}
+```
+
+### Fetch Graph Data
+
+This route returns the graph data which is intended to visualize.
+
+endpoint: `/api/graph/data`
 
 method: `GET`
 
@@ -49,7 +121,34 @@ content type: `application/json`
 Data Format example:
 
 ```json
-{"edges":[{"id":"1","mainStat":"53/s","source":"1","target":"2"}],"nodes":[{"arc__failed":0.7,"arc__passed":0.3,"detail__zone":"load","id":"1","subTitle":"instance:#2","title":"Service1"},{"arc__failed":0.5,"arc__passed":0.5,"detail__zone":"transform","id":"2","subTitle":"instance:#3","title":"Service2"}]}
+{
+    "edges": [
+        {
+            "id": "1",
+            "mainStat": "53/s",
+            "source": "1",
+            "target": "2"
+        }
+    ],
+    "nodes": [
+        {
+            "arc__failed": 0.7,
+            "arc__passed": 0.3,
+            "detail__zone": "load",
+            "id": "1",
+            "subTitle": "instance:#2",
+            "title": "Service1"
+        },
+        {
+            "arc__failed": 0.5,
+            "arc__passed": 0.5,
+            "detail__zone": "transform",
+            "id": "2",
+            "subTitle": "instance:#3",
+            "title": "Service2"
+        }
+    ]
+}
 ```
 
 For more detail of the variables please visit [here](https://grafana.com/docs/grafana/latest/visualizations/node-graph/#data-api).
@@ -64,6 +163,22 @@ endpoint: `/api/health`
 method: `GET`
 
 success status code: `200`
+
+## API Example
+
+In `example` folder you can find a simple API application in Python Flask.
+
+### Requirements:
+
+- flask
+- flask-cors
+
+### Run
+
+```bash
+python run.py
+```
+The application will be started on `http://localhost:5000`
 
 ## Compiling the data source by yourself
 
