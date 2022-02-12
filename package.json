@@ -1,6 +1,6 @@
 {
   "name": "hamedkarbasi93-nodegraphapi-datasource",
-  "version": "1.0.0",
+  "version": "0.3.1",
   "description": "",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
@@ -10,7 +10,7 @@
     "sign": "grafana-toolkit plugin:sign",
     "start": "yarn watch"
   },
-  "author": "karbasi",
+  "author": "Hamed Karbasi",
   "license": "Apache-2.0",
   "devDependencies": {
     "@grafana/data": "latest",

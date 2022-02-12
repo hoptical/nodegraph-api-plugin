@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "datasource",
-  "name": "Node Graph API Datasource Plugin",
+  "name": "Node Graph API",
   "id": "hamedkarbasi93-nodegraphapi-datasource",
   "metrics": true,
   "info": {
@@ -22,11 +22,11 @@
     "links": [
       {
         "name": "Website",
-        "url": "https://github.com/exaco/nodegraph-api-plugin"
+        "url": "https://github.com/hoptical/nodegraph-api-plugin"
       },
       {
         "name": "License",
-        "url": "https://github.com/exaco/nodegraph-api-plugin/blob/master/LICENSE"
+        "url": "https://github.com/hoptical/nodegraph-api-plugin/blob/master/LICENSE"
       }
     ],
     "screenshots": [
@@ -39,7 +39,7 @@
         "path": "img/graph-example.png"
       }
     ],
-    "version": "0.1.0",
+    "version": "0.3.1",
     "updated": "%TODAY%"
   },
   "dependencies": {
