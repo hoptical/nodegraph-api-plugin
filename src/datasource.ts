@@ -8,6 +8,7 @@ import {
   MutableDataFrame,
   FieldType,
   FieldColorModeId,
+  //QueryResultMeta,
 } from '@grafana/data';
 
 import { getBackendSrv } from '@grafana/runtime';
@@ -58,6 +59,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         });
         return outputFields;
       }
+      // Define Frames Meta Data
+      const frameMetaData: any = { preferredVisualisationType: 'nodeGraph' };
       // Extract node fields
       const nodeFields: FrameFieldType[] = fieldAssignator(nodeFieldsResponse);
       // Create nodes dataframe
@@ -65,6 +68,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         name: 'Nodes',
         refId: query.refId,
         fields: nodeFields,
+        meta: frameMetaData,
       });
       // Extract edge fields
       const edgeFields: FrameFieldType[] = fieldAssignator(edgeFieldsResponse);
@@ -73,6 +77,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         name: 'Edges',
         refId: query.refId,
         fields: edgeFields,
+        meta: frameMetaData,
       });
       // Extract graph data of the related api response
       const nodes = responseGraphData.data.nodes;
