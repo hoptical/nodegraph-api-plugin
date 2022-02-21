@@ -180,6 +180,7 @@ The application will be started on `http://localhost:5000`
 You can pass a query string to apply for the data endpoint of the graph via *Query String*. Like any other query, you can utilize variables too:
  
  ![Add Datasource](src/img/query-string.png)
+ 
  With variable `$service` defined as `processors`, above query will produce this endpoint:
  `/api/graph/data?query=text1&service=processors`
 ## Compiling the data source by yourself
