@@ -2,21 +2,17 @@
 
 [![Build](https://github.com/grafana/grafana-starter-datasource/workflows/CI/badge.svg)](https://github.com/grafana/grafana-starter-datasource/actions?query=workflow%3A%22CI%22)
 
-This plugin provides a datasource to connect a REST API to [nodegraph](https://grafana.com/docs/grafana/latest/visualizations/node-graph/) panel of Grafana.
+This plugin provides a data source to connect a REST API to [nodegraph](https://grafana.com/docs/grafana/latest/visualizations/node-graph/) panel of Grafana.
 
 ![Graph Example](src/img/graph-example.png)
-
-## What is Grafana Data Source Plugin?
-
-Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There’s a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. Grafana Data Source Plugins enables integrating such solutions with Grafana.
 
 ## Getting started
 
 1. Use Grafana 7.4 or higher
 
-- Download and place the datasouce in grafana/plugins directory.
+- Download and place the data source in `grafana/plugins` directory.
 
-This plugin is not signed yet, Grafana will not allow loading it by default. you should enable it by adding:
+This plugin is not signed yet; Grafana will not allow loading it by default. You have to enable it by adding:
 
 for example, if you are using Grafana with containers, add:
 
@@ -24,25 +20,25 @@ for example, if you are using Grafana with containers, add:
 -e "GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=hamedkarbasi93-nodegraphapi-datasource"
 ```
 
-2. You can now add the the data source. Just enter the url of your API app and push "Save & Test". You will get an error in case of connection failure.
+2. You can now add the data source. Just enter the URL of your API app and push "Save & Test." You will get an error in case of connection failure.
 
-   > Note: The browser should have access to the application not the grafana server.
+   > Note: The browser should have access to the application, not the Grafana server.
 
 ![Add Datasource](src/img/add-datasource.png)
 
-3. In grafana dashboard, pick the Nodegraph panel and have the graph visualization.
+3. In the Grafana dashboard, pick the Nodegraph panel and visualize the graph.
 
 ## API Configuration
 
-You REST API application should return data in the following format:
+The REST API application should return data in the following format:
 
-   > Note: You API application should handle CORS policy. Otherwise you will face CORS-Policy error in Grafana.
+   > Note: Your API application should handle CORS policy. Otherwise, you will face a CORS-Policy error in Grafana.
 
 ### Fetch Graph Fields
 
 This route returns the nodes and edges fields defined in the [parameter tables](https://grafana.com/docs/grafana/latest/visualizations/node-graph/#data-api).
-This would help the plugin to create desired parameters for the graph.
-For nodes, `id` and for edges, `id`, `source` and `target` fields are required and the other fields are optional.
+It would help the plugin to create desired parameters for the graph.
+For nodes, `id` and for edges, `id`, `source`, and `target` fields are required. Other fields are optional.
 
 endpoint: `/api/graph/fields`
 
@@ -110,7 +106,7 @@ content format example:
 
 ### Fetch Graph Data
 
-This route returns the graph data which is intended to visualize.
+This route returns the graph data, which is intended to visualize.
 
 endpoint: `/api/graph/data`
 
@@ -151,12 +147,12 @@ Data Format example:
 }
 ```
 
-For more detail of the variables please visit [here](https://grafana.com/docs/grafana/latest/visualizations/node-graph/#data-api).
+For more detail of the variables, please visit [here](https://grafana.com/docs/grafana/latest/visualizations/node-graph/#data-api).
 
 ### Health
 
-This route is for testing the health of the API which is used by the *Save & Test* action while adding the plugin.[(Part 2 of the Getting Started Section)](#getting-started).
-Currently, it only needs to return `200` status code in case of a success connection.
+This route is for testing the health of the API, which is used by the *Save & Test* action while adding the plugin.[(Part 2 of the Getting Started Section)](#getting-started).
+Currently, it only needs to return the `200` status code in case of a successful connection.
 
 endpoint: `/api/health`
 
@@ -166,7 +162,7 @@ success status code: `200`
 
 ## API Example
 
-In `example` folder you can find a simple API application in Python Flask.
+In the `example` folder, you can find a simple API application in Python Flask.
 
 ### Requirements:
 
@@ -180,6 +176,12 @@ python run.py
 ```
 The application will be started on `http://localhost:5000`
 
+## Query Configuration
+You can pass a query string to apply for the data endpoint of the graph via *Query String*. Like any other query, you can utilize variables too:
+ 
+ ![Add Datasource](src/img/query-string.png)
+ With variable `$service` defined as `processors`, above query will produce this endpoint:
+ `/api/graph/data?query=text1&service=processors`
 ## Compiling the data source by yourself
 
 1. Install dependencies
@@ -215,7 +217,7 @@ The application will be started on `http://localhost:5000`
 
 ## Contributing
 
-Thank you for considering contributing! If you find an issue, or have a better way to do something, feel free to open an issue, or a PR.
+Thank you for considering contributing! If you find an issue or have a better way to do something, feel free to open an issue or a PR.
 
 ## License
 
