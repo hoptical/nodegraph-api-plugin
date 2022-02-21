@@ -8,10 +8,11 @@ import {
   MutableDataFrame,
   FieldType,
   FieldColorModeId,
-  //QueryResultMeta,
 } from '@grafana/data';
 
 import { getBackendSrv } from '@grafana/runtime';
+
+import { getTemplateSrv } from '@grafana/runtime';
 
 import { MyQuery, MyDataSourceOptions, defaultQuery } from './types';
 
@@ -26,10 +27,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     const promises = options.targets.map(async target => {
       const query = defaults(target, defaultQuery);
+      const dataQuery = getTemplateSrv().replace(query.queryText, options.scopedVars);
       // fetch graph fields from api
-      const responseGraphFields = await this.doRequest('/api/graph/fields', `query=${query.queryText}`);
+      const responseGraphFields = await this.doRequest('/api/graph/fields', `${dataQuery}`);
       // fetch graph data from api
-      const responseGraphData = await this.doRequest('/api/graph/data', `query=${query.queryText}`);
+      const responseGraphData = await this.doRequest('/api/graph/data', `${dataQuery}`);
       // extract fields of the nodes and edges in the graph fields object
       const nodeFieldsResponse = responseGraphFields.data.nodes_fields;
       const edgeFieldsResponse = responseGraphFields.data.edges_fields;
@@ -96,11 +98,14 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return Promise.all(promises).then(data => ({ data: data[0] }));
   }
   async doRequest(endpoint: string, params?: string) {
-    const result = await getBackendSrv().datasourceRequest({
+    //   const result = await getBackendSrv().datasourceRequest({
+    //     method: 'GET',
+    //     url: `${this.baseUrl}${endpoint}${`?${params}`}`,
+    //   });
+    const result = getBackendSrv().datasourceRequest({
       method: 'GET',
       url: `${this.baseUrl}${endpoint}${params?.length ? `?${params}` : ''}`,
     });
-
     return result;
   }
 

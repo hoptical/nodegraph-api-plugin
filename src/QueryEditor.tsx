@@ -23,10 +23,11 @@ export class QueryEditor extends PureComponent<Props> {
       <div className="gf-form">
         <FormField
           labelWidth={8}
+          inputWidth={20}
           value={queryText || ''}
           onChange={this.onQueryTextChange}
-          label="Query Text"
-          tooltip="Not used yet"
+          label="Query String"
+          tooltip="The query string for data endpoint of the node graph api; i.e. /api/graph/data?query=sometext"
         />
       </div>
     );
