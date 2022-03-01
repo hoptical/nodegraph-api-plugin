@@ -39,7 +39,7 @@
         "path": "img/graph-example.png"
       }
     ],
-    "version": "0.4.0",
+    "version": "0.4.1",
     "updated": "%TODAY%"
   },
   "dependencies": {
