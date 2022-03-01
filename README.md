@@ -4,7 +4,7 @@
 
 This plugin provides a data source to connect a REST API to [nodegraph](https://grafana.com/docs/grafana/latest/visualizations/node-graph/) panel of Grafana.
 
-![Graph Example](https://github.com/hoptical/nodegraph-api-plugin/blob/f447b74ecefd827b388e791a34792730e9a9a11d/src/img/graph-example.png)
+![Graph Example](https://raw.githubusercontent.com/hoptical/nodegraph-api-plugin/f447b74ecefd827b388e791a34792730e9a9a11d/src/img/graph-example.png)
 
 ## Getting started
 
@@ -24,7 +24,7 @@ for example, if you are using Grafana with containers, add:
 
    > Note: The browser should have access to the application, not the Grafana server.
 
-![Add Datasource](https://github.com/hoptical/nodegraph-api-plugin/blob/f447b74ecefd827b388e791a34792730e9a9a11d/src/img/add-datasource.png)
+![Add Datasource](https://raw.githubusercontent.com/hoptical/nodegraph-api-plugin/f447b74ecefd827b388e791a34792730e9a9a11d/src/img/add-datasource.png)
 
 3. In the Grafana dashboard, pick the Nodegraph panel and visualize the graph.
 
@@ -179,7 +179,7 @@ The application will be started on `http://localhost:5000`
 ## Query Configuration
 You can pass a query string to apply for the data endpoint of the graph via *Query String*. Like any other query, you can utilize variables too:
  
- ![Add Datasource](https://github.com/hoptical/nodegraph-api-plugin/blob/22a1933b1e012602c817817f4583697e25028382/src/img/query-string.png)
+ ![Add Datasource](https://raw.githubusercontent.com/hoptical/nodegraph-api-plugin/22a1933b1e012602c817817f4583697e25028382/src/img/query-string.png)
  
  With variable `$service` defined as `processors`, above query will produce this endpoint:
  `/api/graph/data?query=text1&service=processors`

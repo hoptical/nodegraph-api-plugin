@@ -31,12 +31,16 @@
     ],
     "screenshots": [
       {
+        "name": "Graph Example",
+        "path": "img/graph-example.png"
+      },
+      {
         "name": "Add Datasource",
         "path": "img/add-datasource.png"
       },
       {
-        "name": "Graph Example",
-        "path": "img/graph-example.png"
+        "name": "Query String",
+        "path": "img/query-string.png"
       }
     ],
     "version": "0.4.1",
