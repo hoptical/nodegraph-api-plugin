@@ -2,31 +2,38 @@
 
 [![Build](https://github.com/grafana/grafana-starter-datasource/workflows/CI/badge.svg)](https://github.com/grafana/grafana-starter-datasource/actions?query=workflow%3A%22CI%22)
 
-This plugin provides a data source to connect a REST API to [nodegraph](https://grafana.com/docs/grafana/latest/visualizations/node-graph/) panel of Grafana.
+This plugin provides a data source to connect a REST API to [nodegraph](https://grafana.com/docs/grafana/latest/visualizations/node-graph/) panel of Grafana. It is [signed and published by Grafana](https://grafana.com/grafana/plugins/hamedkarbasi93-nodegraphapi-datasource/).
 
 ![Graph Example](https://raw.githubusercontent.com/hoptical/nodegraph-api-plugin/f447b74ecefd827b388e791a34792730e9a9a11d/src/img/graph-example.png)
 
+## Requirements
+- **Grafana 7.5+**
+
 ## Getting started
 
-1. Use Grafana 7.4 or higher
+### Installation via grafana-cli tool
 
-- Download and place the data source in `grafana/plugins` directory.
+Use the grafana-cli tool to install Node Graph API from the commandline:
 
-This plugin is not signed yet; Grafana will not allow loading it by default. You have to enable it by adding:
-
-for example, if you are using Grafana with containers, add:
-
-```yaml
--e "GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=hamedkarbasi93-nodegraphapi-datasource"
+```bash
+grafana-cli plugins install hamedkarbasi93-nodegraphapi-datasource
 ```
 
-2. You can now add the data source. Just enter the URL of your API app and push "Save & Test." You will get an error in case of connection failure.
+The plugin will be installed into your grafana plugins directory; the default is `/var/lib/grafana/plugins`. [More information on the cli tool](https://grafana.com/docs/grafana/latest/administration/cli/#plugins-commands).
 
-   > Note: The browser should have access to the application, not the Grafana server.
+### Installation via zip file
+
+Alternatively, you can manually download the [latest](https://github.com/hoptical/nodegraph-api-plugin/releases/latest) release .zip file and unpack it into your grafana plugins directory; the default is `/var/lib/grafana/plugins`.
+
+### Plugin Configuration
+
+You can now add the data source. Just enter the URL of your API app and push "Save & Test." You will get an error in case of connection failure.
+
+> Important note: The browser should have access to the application, not the Grafana server.
 
 ![Add Datasource](https://raw.githubusercontent.com/hoptical/nodegraph-api-plugin/f447b74ecefd827b388e791a34792730e9a9a11d/src/img/add-datasource.png)
 
-3. In the Grafana dashboard, pick the Nodegraph panel and visualize the graph.
+In the Grafana dashboard, pick the Nodegraph panel and visualize the graph.
 
 ## API Configuration
 
@@ -178,9 +185,9 @@ The application will be started on `http://localhost:5000`
 
 ## Query Configuration
 You can pass a query string to apply for the data endpoint of the graph via *Query String*. Like any other query, you can utilize variables too:
- 
+
  ![Add Datasource](https://raw.githubusercontent.com/hoptical/nodegraph-api-plugin/22a1933b1e012602c817817f4583697e25028382/src/img/query-string.png)
- 
+
  With variable `$service` defined as `processors`, above query will produce this endpoint:
  `/api/graph/data?query=text1&service=processors`
 ## Compiling the data source by yourself
@@ -208,6 +215,10 @@ You can pass a query string to apply for the data endpoint of the graph via *Que
    ```bash
    yarn build
    ```
+
+## Roadmap
+
+- Convert the plugin to a backend data source. This will prevent the client browser necessity to connect to the API server.
 
 ## Learn more
 
