@@ -16,12 +16,16 @@ import { getTemplateSrv } from '@grafana/runtime';
 
 import { MyQuery, MyDataSourceOptions, defaultQuery } from './types';
 
+// proxy route
+const routePath = '/nodegraphds';
+
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
-  baseUrl: string; // base url of the api
+  url: string;
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
 
-    this.baseUrl = instanceSettings.jsonData.baseUrl || '';
+    // proxy url
+    this.url = instanceSettings.url || '';
   }
 
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
@@ -98,13 +102,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return Promise.all(promises).then(data => ({ data: data[0] }));
   }
   async doRequest(endpoint: string, params?: string) {
-    //   const result = await getBackendSrv().datasourceRequest({
-    //     method: 'GET',
-    //     url: `${this.baseUrl}${endpoint}${`?${params}`}`,
-    //   });
+    // Do the request on proxy; the server will replace url + routePath with the url
+    // defined in plugin.json
     const result = getBackendSrv().datasourceRequest({
       method: 'GET',
-      url: `${this.baseUrl}${endpoint}${params?.length ? `?${params}` : ''}`,
+      url: `${this.url}${routePath}${endpoint}${params?.length ? `?${params}` : ''}`,
     });
     return result;
   }

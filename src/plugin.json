@@ -1,5 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "routes": [
+    {
+      "path": "nodegraphds",
+      "url": "{{ .JsonData.baseUrl }}"
+    }
+  ],
   "type": "datasource",
   "name": "Node Graph API",
   "id": "hamedkarbasi93-nodegraphapi-datasource",
