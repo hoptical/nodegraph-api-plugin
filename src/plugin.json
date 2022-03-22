@@ -3,7 +3,7 @@
   "routes": [
     {
       "path": "nodegraphds",
-      "url": "{{ .JsonData.baseUrl }}"
+      "url": "{{ .JsonData.url }}"
     }
   ],
   "type": "datasource",

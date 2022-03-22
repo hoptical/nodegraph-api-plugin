@@ -14,7 +14,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
     const { onOptionsChange, options } = this.props;
     const jsonData = {
       ...options.jsonData,
-      baseUrl: event.target.value,
+      url: event.target.value,
     };
     onOptionsChange({ ...options, jsonData });
   };
@@ -30,7 +30,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
           <FormField
             label="URL"
             onChange={this.onURLChange}
-            value={jsonData.baseUrl || ''}
+            value={jsonData.url || ''}
             placeholder="http://localhost:5000"
           />
         </div>
