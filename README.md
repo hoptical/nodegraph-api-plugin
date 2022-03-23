@@ -1,6 +1,8 @@
 # Nodegraph API Plugin for Grafana
 
-[![Build](https://github.com/grafana/grafana-starter-datasource/workflows/CI/badge.svg)](https://github.com/grafana/grafana-starter-datasource/actions?query=workflow%3A%22CI%22)
+[![License](https://img.shields.io/github/license/hoptical/nodegraph-api-plugin)](LICENSE)
+[![CI](https://github.com/hoptical/nodegraph-api-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/hoptical/nodegraph-api-plugin/actions/workflows/ci.yml)
+[![Release](https://github.com/hoptical/nodegraph-api-plugin/actions/workflows/release.yml/badge.svg)](https://github.com/hoptical/nodegraph-api-plugin/actions/workflows/release.yml)
 
 This plugin provides a data source to connect a REST API to [nodegraph](https://grafana.com/docs/grafana/latest/visualizations/node-graph/) panel of Grafana. It is [signed and published by Grafana](https://grafana.com/grafana/plugins/hamedkarbasi93-nodegraphapi-datasource/).
 
@@ -29,17 +31,17 @@ Alternatively, you can manually download the [latest](https://github.com/hoptica
 
 You can now add the data source. Just enter the URL of your API app and push "Save & Test." You will get an error in case of connection failure.
 
-> Important note: The browser should have access to the application, not the Grafana server.
-
 ![Add Datasource](https://raw.githubusercontent.com/hoptical/nodegraph-api-plugin/f447b74ecefd827b388e791a34792730e9a9a11d/src/img/add-datasource.png)
 
 In the Grafana dashboard, pick the Nodegraph panel and visualize the graph.
 
+> Note on Application Access: 
+> - Versions 0.x.x work in *direct* mode. i.e., The browser must have access to the API application.
+> - Versions 1.x.x+ work in *proxy* mode. i.e., The Grafana server should have access to the API application.
+
 ## API Configuration
 
-The REST API application should return data in the following format:
-
-   > Note: Your API application should handle CORS policy. Otherwise, you will face a CORS-Policy error in Grafana.
+The REST API application should handle three requests: *fields*, *data*, and *health*. They are described below.
 
 ### Fetch Graph Fields
 
@@ -174,7 +176,6 @@ In the `example` folder, you can find a simple API application in Python Flask.
 ### Requirements:
 
 - flask
-- flask-cors
 
 ### Run
 
