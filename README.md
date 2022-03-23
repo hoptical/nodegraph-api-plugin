@@ -219,7 +219,8 @@ You can pass a query string to apply for the data endpoint of the graph via *Que
 
 ## Roadmap
 
-- Convert the plugin to a backend data source. This will prevent the client browser necessity to connect to the API server.
+- [x] Utilize BackenSrv in proxy mode. This will prevent the client browser necessity to connect to the API server.
+- [ ] Write unit tests.
 
 ## Learn more
 
