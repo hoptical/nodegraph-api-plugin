@@ -12,9 +12,9 @@ def fetch_graph_fields():
                     {"field_name": "mainStat", "type": "string"},
                     {"field_name": "secondaryStat", "type": "number"},
                     {"field_name": "arc__failed",
-                     "type": "number", "color": "red"},
+                     "type": "number", "color": "red", "displayName": "Failed"},
                     {"field_name": "arc__passed",
-                     "type": "number", "color": "green"},
+                     "type": "number", "color": "green", "displayName": "Passed"},
                     {"field_name": "detail__role",
                      "type": "string", "displayName": "Role"}]
     edges_fields = [
