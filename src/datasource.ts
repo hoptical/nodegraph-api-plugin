@@ -43,7 +43,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       interface FrameFieldType {
         name: string;
         type: any;
-        config?: any;
+        config: Record<string, any>;
       }
       // This function gets the fields of the api and transforms them to what grafana dataframe prefers
       function fieldAssignator(FieldsResponse: any): FrameFieldType[] {
@@ -52,14 +52,14 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           // fieldType can be either number of string
           var fieldType = field['type'] === 'number' ? FieldType.number : FieldType.string;
           // add 'name' and 'type' items to the output object
-          var outputField: FrameFieldType = { name: field['field_name'], type: fieldType };
+          var outputField: FrameFieldType = { name: field['field_name'], type: fieldType, config: {} };
           // add color for 'arc__*' items(only apperas for the nodes)
           if ('color' in field) {
-            outputField.config = { color: { fixedColor: field['color'], mode: FieldColorModeId.Fixed } };
+            outputField.config.color = { fixedColor: field['color'], mode: FieldColorModeId.Fixed };
           }
           // add disPlayName for 'detail__*' items
           if ('displayName' in field) {
-            outputField.config = { displayName: field['displayName'] };
+            outputField.config.displayName = field['displayName'];
           }
           outputFields.push(outputField);
         });
