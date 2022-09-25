@@ -10,9 +10,7 @@ import {
   FieldColorModeId,
 } from '@grafana/data';
 
-import { getBackendSrv } from '@grafana/runtime';
-
-import { getTemplateSrv } from '@grafana/runtime';
+import { getBackendSrv, getTemplateSrv } from '@grafana/runtime';
 
 import { MyQuery, MyDataSourceOptions, defaultQuery } from './types';
 
@@ -66,7 +64,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
             outputField.config.links = [{
               url: field['link__url'],
               title: field['link__title'] || "Link",
-              targetBlank: true
+              targetBlank: true,
             }];
           }
           // add single internal link for items (link__expr, link__uid, link__name)
@@ -77,7 +75,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
               "internal": {
               "query": {"expr": field['link__expr']},
               "datasourceUid": field['link__uid'],
-              "datasourceName": field['link__name']
+              "datasourceName": field['link__name'],
               }
             }];
           }
