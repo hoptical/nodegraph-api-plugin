@@ -75,11 +75,9 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
               url:  field['link__url'] || "",
               title: field['link__title'] || "Link",
               "internal": {
-                "query": {
-                  "expr": field['link__expr'],
-                },
-                "datasourceUid": field['link__uid'],
-                "datasourceName": field['link__name']
+              "query": {"expr": field['link__expr']},
+              "datasourceUid": field['link__uid'],
+              "datasourceName": field['link__name']
               }
             }];
           }
