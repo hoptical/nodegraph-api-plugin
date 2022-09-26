@@ -61,23 +61,27 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           }
           // add single external link for items (link__url, link__title)
           if ('link__url' in field) {
-            outputField.config.links = [{
-              url: field['link__url'],
-              title: field['link__title'] || "Link",
-              targetBlank: true,
-            }];
+            outputField.config.links = [
+              {
+                url: field['link__url'],
+                title: field['link__title'] || 'Link',
+                targetBlank: true,
+              },
+            ];
           }
           // add single internal link for items (link__expr, link__uid, link__name)
-          if (('link__expr' in field) && ('link__uid' in field)) {
-            outputField.config.links = [{
-              url:  field['link__url'] || "",
-              title: field['link__title'] || "Link",
-              "internal": {
-              "query": {"expr": field['link__expr']},
-              "datasourceUid": field['link__uid'],
-              "datasourceName": field['link__name'],
-              }
-            }];
+          if ('link__expr' in field && 'link__uid' in field) {
+            outputField.config.links = [
+              {
+                url: field['link__url'] || '',
+                title: field['link__title'] || 'Link',
+                internal: {
+                  query: { expr: field['link__expr'] },
+                  datasourceUid: field['link__uid'],
+                  datasourceName: field['link__name'],
+                },
+              },
+            ];
           }
           outputFields.push(outputField);
         });
