@@ -1,6 +1,6 @@
 {
   "name": "hamedkarbasi93-nodegraphapi-datasource",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
