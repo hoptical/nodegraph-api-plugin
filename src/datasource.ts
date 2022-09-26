@@ -50,7 +50,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           // fieldType can be either number of string
           var fieldType = field['type'] === 'number' ? FieldType.number : FieldType.string;
           // add 'name' and 'type' items to the output object
-          var outputField: FrameFieldType = { name: field['field_name'], type: fieldType, config: {} };
+          var outputField: FrameFieldType = { name: field['field_name'], type: fieldType, config: { links: [] } };
           // add color for 'arc__*' items(only apperas for the nodes)
           if ('color' in field) {
             outputField.config.color = { fixedColor: field['color'], mode: FieldColorModeId.Fixed };
@@ -59,29 +59,44 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           if ('displayName' in field) {
             outputField.config.displayName = field['displayName'];
           }
-          // add single external link for items (link__url, link__title)
-          if ('link__url' in field) {
-            outputField.config.links = [
-              {
-                url: field['link__url'],
-                title: field['link__title'] || 'Link',
-                targetBlank: true,
-              },
-            ];
+
+          // add optional links (format: link__name__param)
+          let links: Record<string, any> = {};
+          for (let xkey in field) {
+            if (xkey.startsWith('links__')) {
+              let set = xkey.split('__');
+              if (!links[set[1]]) {
+                links[set[1]] = {};
+              }
+              links[set[1]][set[2]] = field[xkey];
+            }
           }
-          // add single internal link for items (link__expr, link__uid, link__name)
-          if ('link__expr' in field && 'link__uid' in field) {
-            outputField.config.links = [
-              {
-                url: field['link__url'] || '',
-                title: field['link__title'] || 'Link',
-                internal: {
-                  query: { expr: field['link__expr'] },
-                  datasourceUid: field['link__uid'],
-                  datasourceName: field['link__name'],
-                },
-              },
-            ];
+          if (Object.keys(links).length > 0) {
+            // transforms parameters into link objects
+            // outputField.config.links = [];
+            for (let ykey in links) {
+              let link = links[ykey];
+              // add single external link for items (url, title)
+              if ('url' in link) {
+                outputField.config.links.push({
+                  url: link['url'],
+                  title: link['title'] || 'Link',
+                  targetBlank: true,
+                });
+              }
+              // add single internal link for items (expr, uid, name)
+              if ('expr' in link && 'uid' in link) {
+                outputField.config.links.push({
+                  url: link['url'] || '',
+                  title: link['title'] || 'Link',
+                  internal: {
+                    query: { expr: link['expr'] },
+                    datasourceUid: link['uid'],
+                    datasourceName: link['name'] || link['uid'],
+                  },
+                });
+              }
+            }
           }
           outputFields.push(outputField);
         });
