@@ -33,9 +33,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       const query = defaults(target, defaultQuery);
       const dataQuery = getTemplateSrv().replace(query.queryText, options.scopedVars);
       // fetch graph fields from api
-      const responseGraphFields = await this.doRequest('/api/graph/fields', `${dataQuery}`);
+      const fieldApiUrlPath = getTemplateSrv().replace(query.fieldApiUrlPath, options.scopedVars);
+      const responseGraphFields = await this.doRequest(`${fieldApiUrlPath}`, `${dataQuery}`);
       // fetch graph data from api
-      const responseGraphData = await this.doRequest('/api/graph/data', `${dataQuery}`);
+      const dataApiUrlPath = getTemplateSrv().replace(query.dataApiUrlPath, options.scopedVars);
+      const responseGraphData = await this.doRequest(`${dataApiUrlPath}`, `${dataQuery}`);
       // extract fields of the nodes and edges in the graph fields object
       const nodeFieldsResponse = responseGraphFields.data.nodes_fields;
       const edgeFieldsResponse = responseGraphFields.data.edges_fields;
