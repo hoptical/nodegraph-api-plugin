@@ -61,6 +61,10 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           if ('displayName' in field) {
             outputField.config.displayName = field['displayName'];
           }
+          // add links if exist
+          if ('links' in field) {                                                                                                                                                                                                                                                         
+            outputField.config['links'] = field['links'];                                                                                                                                                                                                                                 
+          } 
           outputFields.push(outputField);
         });
         return outputFields;
