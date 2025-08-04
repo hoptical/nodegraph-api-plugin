@@ -1,3 +1,12 @@
+> **⚠️ This project is archived!**
+>
+> This plugin is no longer maintained and is archived in favor of the [Infinity plugin](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/), which is a much better and more flexible option for connecting REST APIs to Grafana.
+>
+> To visualize node graphs using Infinity, refer to the official documentation:  
+> [Using Node Graph with Infinity](https://grafana.com/docs/plugins/yesoreyeram-infinity-datasource/latest/references/display-options/node-graph/)
+>
+> We highly recommend migrating to Infinity for new and existing dashboards.
+
 # Nodegraph API Plugin for Grafana
 
 [![License](https://img.shields.io/github/license/hoptical/nodegraph-api-plugin)](LICENSE)
